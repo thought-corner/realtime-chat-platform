@@ -58,7 +58,7 @@ java -jar build/libs/realtime-chat-platform-0.0.1-SNAPSHOT.jar
 | `MYSQL_USER` / `MYSQL_PASSWORD` | DB 계정 | `rtchat` / `rtchatpassword` |
 | `REDIS_HOST` / `REDIS_PORT` | Redis 접속 | `localhost` / `6379` |
 | `JWT_SECRET_KEY` | JWT 서명 키 | (개발용 기본값 내장) |
-| `JWT_EXPIRATION` | 토큰 만료(ms) | `3000` |
+| `JWT_EXPIRATION` | 토큰 만료(분) | `3000` |
 
 > MySQL/Redis 관련 기본값은 `backend/.env.example` 및 `docker-compose.yml`과 동일합니다.
 
