@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class RealtimeChatPlatformApplication
 
 fun main(args: Array<String>) {
-	runApplication<RealtimeChatPlatformApplication>(*args)
+    runApplication<RealtimeChatPlatformApplication>(*args)
 }
