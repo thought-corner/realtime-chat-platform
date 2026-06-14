@@ -228,6 +228,10 @@ a {
   flex-shrink: 0;
 }
 
+.member__body {
+  flex: 1;
+}
+
 .member__name {
   font-weight: 600;
 }
@@ -239,6 +243,92 @@ a {
 
 .empty {
   color: var(--text-muted);
+}
+
+.chat-section {
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.create-room {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.create-room input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+}
+
+.create-room input:focus {
+  border-color: var(--primary);
+}
+
+.room-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.room {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.room__info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.room__name {
+  font-weight: 600;
+}
+
+.room__tag {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.room__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--danger);
+  border-radius: 999px;
+  padding: 2px 8px;
+  min-width: 20px;
+  text-align: center;
 }
 
 .chat-header {

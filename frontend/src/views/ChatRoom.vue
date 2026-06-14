@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { createStompClient } from '../stomp'
 import { getEmail } from '../session'
+import { fetchHistory, markRead } from '../api/chat'
 
 const route = useRoute()
 const router = useRouter()
@@ -23,11 +24,21 @@ function scrollToBottom() {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  // 1) 과거 메시지 이력을 REST로 먼저 채우고 읽음 처리
+  try {
+    const { data } = await fetchHistory(roomId)
+    messages.value = data
+    scrollToBottom()
+    await markRead(roomId)
+  } catch (e) {
+    error.value = e.response?.data?.message ?? '메시지 이력을 불러오지 못했습니다.'
+  }
+
+  // 2) STOMP로 실시간 구독 시작
   client = createStompClient({
     onConnect: () => {
       connected.value = true
-      error.value = ''
       // /topic/{roomId} 구독: 같은 방의 메시지를 실시간 수신
       client.subscribe(`/topic/${roomId}`, (frame) => {
         messages.value.push(JSON.parse(frame.body))
