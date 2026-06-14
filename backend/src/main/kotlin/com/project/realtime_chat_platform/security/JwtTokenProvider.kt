@@ -33,4 +33,17 @@ class JwtTokenProvider(
             .signWith(signingKey)
             .compact()
     }
+
+    /**
+     * JWT의 서명·만료를 검증하고 클레임을 반환한다. 토큰을 다루는 단일 책임자로서,
+     * HTTP 요청([JwtAuthFilter])과 STOMP 프레임(`StompAuthChannelInterceptor`)
+     * 양쪽의 검증 진입점이다. 유효하지 않으면 `JwtException`이 전파된다.
+     */
+    fun validateToken(token: String): Claims =
+        Jwts
+            .parserBuilder()
+            .setSigningKey(signingKey)
+            .build()
+            .parseClaimsJws(token)
+            .body
 }

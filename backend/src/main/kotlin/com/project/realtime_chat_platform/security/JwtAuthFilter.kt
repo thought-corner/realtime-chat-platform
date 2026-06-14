@@ -1,11 +1,9 @@
 package com.project.realtime_chat_platform.security
 
-import io.jsonwebtoken.Jwts
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
@@ -18,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthFilter(
-    @Value("\${jwt.secretKey}") private val secretKey: String,
+    private val jwtTokenProvider: JwtTokenProvider,
 ) : OncePerRequestFilter() {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -45,13 +43,7 @@ class JwtAuthFilter(
     private fun authenticate(header: String) {
         require(header.startsWith("Bearer ")) { "Bearer 형식이 아닙니다." }
         val jwtToken = header.substring(7)
-        val claims =
-            Jwts
-                .parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(jwtToken)
-                .body
+        val claims = jwtTokenProvider.validateToken(jwtToken)
         val authorities: List<GrantedAuthority> =
             listOf(SimpleGrantedAuthority("ROLE_" + claims["role"]))
         val userDetails: UserDetails = User(claims.subject, "", authorities)

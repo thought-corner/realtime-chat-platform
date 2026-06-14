@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { signIn } from '../api/auth'
-import { setToken } from '../session'
+import { setToken, setEmail } from '../session'
 
 const email = ref('')
 const password = ref('')
@@ -14,6 +14,7 @@ async function submit() {
   try {
     const { data } = await signIn({ email: email.value, password: password.value })
     setToken(data.token)
+    setEmail(email.value)
     router.push('/members')
   } catch (e) {
     error.value = e.response?.data?.message ?? '로그인에 실패했습니다.'
