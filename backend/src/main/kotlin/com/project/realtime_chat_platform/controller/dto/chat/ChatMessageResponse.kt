@@ -1,5 +1,6 @@
 package com.project.realtime_chat_platform.controller.dto.chat
 
+import com.project.realtime_chat_platform.constants.ChatTopicEventType
 import com.project.realtime_chat_platform.service.dto.chat.ChatMessageResult
 
 data class ChatMessageResponse(
