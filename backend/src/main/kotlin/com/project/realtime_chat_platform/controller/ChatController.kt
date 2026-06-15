@@ -5,12 +5,12 @@ import com.project.realtime_chat_platform.controller.dto.chat.ChatMessageRespons
 import com.project.realtime_chat_platform.controller.dto.chat.ChatRoomResponseList
 import com.project.realtime_chat_platform.controller.dto.chat.MessageReadResponse
 import com.project.realtime_chat_platform.controller.dto.chat.MyChatRoomResponseList
+import com.project.realtime_chat_platform.messaging.ChatBroadcaster
 import com.project.realtime_chat_platform.service.ChatMessageService
 import com.project.realtime_chat_platform.service.ChatRoomService
 import com.project.realtime_chat_platform.service.ReadStatusService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.messaging.simp.SimpMessageSendingOperations
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -31,7 +31,7 @@ class ChatController(
     private val chatRoomService: ChatRoomService,
     private val chatMessageService: ChatMessageService,
     private val readStatusService: ReadStatusService,
-    private val messageTemplate: SimpMessageSendingOperations,
+    private val chatBroadcaster: ChatBroadcaster,
 ) {
     @PostMapping("/room/group/create")
     fun createGroupRoom(
@@ -70,7 +70,7 @@ class ChatController(
         val updates = readStatusService.markRead(email, roomId)
         // 안 읽은 인원 수가 바뀐 메시지가 있으면 같은 방 구독자에게 실시간 전파한다.
         if (updates.isNotEmpty()) {
-            messageTemplate.convertAndSend("/topic/$roomId", MessageReadResponse.from(updates))
+            chatBroadcaster.broadcast(roomId, MessageReadResponse.from(updates))
         }
         return ResponseEntity.ok().build()
     }
