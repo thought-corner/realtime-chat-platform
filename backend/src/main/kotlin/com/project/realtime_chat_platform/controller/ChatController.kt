@@ -1,9 +1,9 @@
 package com.project.realtime_chat_platform.controller
 
+import com.project.realtime_chat_platform.aop.CurrentMember
 import com.project.realtime_chat_platform.controller.dto.chat.ChatMessageResponse
 import com.project.realtime_chat_platform.controller.dto.chat.ChatRoomResponse
 import com.project.realtime_chat_platform.controller.dto.chat.MyChatRoomResponse
-import com.project.realtime_chat_platform.security.CurrentMember
 import com.project.realtime_chat_platform.service.ChatMessageService
 import com.project.realtime_chat_platform.service.ChatRoomService
 import com.project.realtime_chat_platform.service.ReadStatusService

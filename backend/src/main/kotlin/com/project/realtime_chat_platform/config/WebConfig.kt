@@ -1,6 +1,6 @@
 package com.project.realtime_chat_platform.config
 
-import com.project.realtime_chat_platform.security.CurrentMemberArgumentResolver
+import com.project.realtime_chat_platform.config.CurrentMemberArgumentResolver
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer

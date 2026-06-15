@@ -1,4 +1,4 @@
-package com.project.realtime_chat_platform.security
+package com.project.realtime_chat_platform.aop
 
 /**
  * 인증된 현재 회원의 이메일을 컨트롤러 파라미터로 주입받기 위한 애너테이션.

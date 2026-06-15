@@ -1,5 +1,6 @@
-package com.project.realtime_chat_platform.security
+package com.project.realtime_chat_platform.config
 
+import com.project.realtime_chat_platform.aop.CurrentMember
 import org.springframework.core.MethodParameter
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException
 import org.springframework.security.core.context.SecurityContextHolder
@@ -10,7 +11,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
 
 /**
- * [CurrentMember]이 붙은 String 파라미터에 인증된 회원의 이메일(인증 principal name)을 주입한다.
+ * [com.project.realtime_chat_platform.aop.CurrentMember]이 붙은 String 파라미터에 인증된 회원의 이메일(인증 principal name)을 주입한다.
  */
 @Component
 class CurrentMemberArgumentResolver : HandlerMethodArgumentResolver {
