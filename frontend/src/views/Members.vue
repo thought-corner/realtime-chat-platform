@@ -13,7 +13,7 @@ const myEmail = getEmail()
 onMounted(async () => {
   try {
     const { data } = await fetchMembers()
-    members.value = data
+    members.value = data.members
   } catch (e) {
     error.value = e.response?.data?.message ?? '목록을 불러오지 못했습니다.'
   }

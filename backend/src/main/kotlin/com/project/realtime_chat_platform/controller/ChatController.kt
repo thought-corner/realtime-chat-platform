@@ -1,9 +1,9 @@
 package com.project.realtime_chat_platform.controller
 
 import com.project.realtime_chat_platform.aop.CurrentMember
-import com.project.realtime_chat_platform.controller.dto.chat.ChatMessageResponse
-import com.project.realtime_chat_platform.controller.dto.chat.ChatRoomResponse
-import com.project.realtime_chat_platform.controller.dto.chat.MyChatRoomResponse
+import com.project.realtime_chat_platform.controller.dto.chat.ChatMessageResponseList
+import com.project.realtime_chat_platform.controller.dto.chat.ChatRoomResponseList
+import com.project.realtime_chat_platform.controller.dto.chat.MyChatRoomResponseList
 import com.project.realtime_chat_platform.service.ChatMessageService
 import com.project.realtime_chat_platform.service.ChatRoomService
 import com.project.realtime_chat_platform.service.ReadStatusService
@@ -40,8 +40,8 @@ class ChatController(
     }
 
     @GetMapping("/room/group/list")
-    fun getGroupChatRooms(): ResponseEntity<List<ChatRoomResponse>> =
-        ResponseEntity(ChatRoomResponse.from(chatRoomService.getGroupChatRooms()), HttpStatus.OK)
+    fun getGroupChatRooms(): ResponseEntity<ChatRoomResponseList> =
+        ResponseEntity(ChatRoomResponseList.from(chatRoomService.getGroupChatRooms()), HttpStatus.OK)
 
     @PostMapping("/room/group/{roomId}/join")
     fun joinGroupChatRoom(
@@ -56,8 +56,8 @@ class ChatController(
     fun getChatHistory(
         @CurrentMember email: String,
         @PathVariable roomId: Long,
-    ): ResponseEntity<List<ChatMessageResponse>> =
-        ResponseEntity(ChatMessageResponse.from(chatMessageService.getChatHistory(email, roomId)), HttpStatus.OK)
+    ): ResponseEntity<ChatMessageResponseList> =
+        ResponseEntity(ChatMessageResponseList.from(chatMessageService.getChatHistory(email, roomId)), HttpStatus.OK)
 
     @PostMapping("/room/{roomId}/read")
     fun messageRead(
@@ -71,8 +71,8 @@ class ChatController(
     @GetMapping("/my/rooms")
     fun getMyChatRooms(
         @CurrentMember email: String,
-    ): ResponseEntity<List<MyChatRoomResponse>> =
-        ResponseEntity(MyChatRoomResponse.from(chatRoomService.getMyChatRooms(email)), HttpStatus.OK)
+    ): ResponseEntity<MyChatRoomResponseList> =
+        ResponseEntity(MyChatRoomResponseList.from(chatRoomService.getMyChatRooms(email)), HttpStatus.OK)
 
     @DeleteMapping("/room/group/{roomId}/leave")
     fun leaveGroupChatRoom(

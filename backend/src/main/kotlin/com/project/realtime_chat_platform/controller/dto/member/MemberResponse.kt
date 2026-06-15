@@ -8,12 +8,11 @@ data class MemberResponse(
     val email: String,
 ) {
     companion object {
-        fun from(result: MemberSummaryResult) = MemberResponse(
-            id = result.id,
-            name = result.name,
-            email = result.email,
-        )
-
-        fun from(results: List<MemberSummaryResult>): List<MemberResponse> = results.map { from(it) }
+        fun from(result: MemberSummaryResult) =
+            MemberResponse(
+                id = result.id,
+                name = result.name,
+                email = result.email,
+            )
     }
 }

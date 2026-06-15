@@ -24,8 +24,8 @@ async function load() {
   error.value = ''
   try {
     const [mine, groups] = await Promise.all([fetchMyRooms(), fetchGroupRooms()])
-    myRooms.value = mine.data
-    groupRooms.value = groups.data
+    myRooms.value = mine.data.rooms
+    groupRooms.value = groups.data.rooms
   } catch (e) {
     error.value = readMessage(e, '채팅방 목록을 불러오지 못했습니다.')
   }

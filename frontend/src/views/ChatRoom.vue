@@ -28,7 +28,7 @@ onMounted(async () => {
   // 1) 과거 메시지 이력을 REST로 먼저 채우고 읽음 처리
   try {
     const { data } = await fetchHistory(roomId)
-    messages.value = data
+    messages.value = data.messages
     scrollToBottom()
     await markRead(roomId)
   } catch (e) {

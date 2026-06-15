@@ -1,6 +1,6 @@
 package com.project.realtime_chat_platform.controller
 
-import com.project.realtime_chat_platform.controller.dto.member.MemberResponse
+import com.project.realtime_chat_platform.controller.dto.member.MemberResponseList
 import com.project.realtime_chat_platform.service.MemberService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -14,8 +14,8 @@ class MemberController(
     private val memberService: MemberService,
 ) {
     @GetMapping("/list")
-    fun members(): ResponseEntity<List<MemberResponse>> {
-        val responses = MemberResponse.from(memberService.findAll())
-        return ResponseEntity(responses, HttpStatus.OK)
+    fun members(): ResponseEntity<MemberResponseList> {
+        val response = MemberResponseList.from(memberService.findAll())
+        return ResponseEntity(response, HttpStatus.OK)
     }
 }
