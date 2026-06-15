@@ -29,12 +29,13 @@ class ChatMessageService(
 ) {
     /**
      * 메시지를 저장하고, 참여자별 읽음 상태 생성을 [ReadStatusService]에 위임한다.
+     * 저장 직후의 안 읽은 인원 수(보낸 사람을 제외한 참여자 수)를 담아 반환한다.
      */
     fun saveMessage(
         roomId: Long,
         senderEmail: String,
         message: String,
-    ) {
+    ): ChatMessageResult {
         val chatRoom = chatRoomRepository.getOrThrow(roomId)
         val sender = memberRepository.getByEmailOrThrow(senderEmail)
         val chatMessage =
@@ -42,10 +43,12 @@ class ChatMessageService(
                 ChatMessage(chatRoom = chatRoom, member = sender, content = message),
             )
         readStatusService.createForNewMessage(chatRoom, chatMessage, sender)
+        return ChatMessageResult.from(chatMessage, readStatusService.countUnreadByMessage(chatMessage))
     }
 
     /**
      * 채팅방의 메시지 이력을 시간순으로 조회한다. 현재 회원이 참여자가 아니면 거부한다.
+     * 각 메시지에는 아직 읽지 않은 참여자 수가 포함된다.
      */
     @Transactional(readOnly = true)
     fun getChatHistory(
@@ -56,6 +59,8 @@ class ChatMessageService(
             throw BusinessException(ChatErrorCode.NOT_ROOM_PARTICIPANT)
         }
         val chatRoom = chatRoomRepository.getOrThrow(roomId)
-        return chatMessageRepository.findByChatRoomOrderByCreatedTimeAsc(chatRoom).map(ChatMessageResult::from)
+        return chatMessageRepository.findByChatRoomOrderByCreatedTimeAsc(chatRoom).map { chatMessage ->
+            ChatMessageResult.from(chatMessage, readStatusService.countUnreadByMessage(chatMessage))
+        }
     }
 }

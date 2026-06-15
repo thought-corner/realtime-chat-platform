@@ -39,10 +39,25 @@ onMounted(async () => {
   client = createStompClient({
     onConnect: () => {
       connected.value = true
-      // /topic/{roomId} 구독: 같은 방의 메시지를 실시간 수신
+      // /topic/{roomId} 구독: 새 메시지(MESSAGE)와 읽음 갱신(READ)을 함께 수신
       client.subscribe(`/topic/${roomId}`, (frame) => {
-        messages.value.push(JSON.parse(frame.body))
-        scrollToBottom()
+        const payload = JSON.parse(frame.body)
+        if (payload.type === 'READ') {
+          // 읽음 이벤트: 해당 메시지들의 안 읽은 인원 수를 실시간 갱신
+          payload.updates.forEach((u) => {
+            const msg = messages.value.find((m) => m.id === u.messageId)
+            if (msg) msg.unreadCount = u.unreadCount
+          })
+        } else {
+          // 새 메시지
+          messages.value.push(payload)
+          scrollToBottom()
+          // 방을 보고 있는 중 도착한 남의 메시지는 즉시 읽음 처리
+          // → 백엔드가 READ 이벤트를 브로드캐스트해 보낸 사람의 안 읽은 수가 실시간으로 줄어든다.
+          if (payload.senderEmail !== myEmail) {
+            markRead(roomId)
+          }
+        }
       })
     },
     onError: () => {
@@ -89,6 +104,12 @@ function send() {
         class="chat-message"
         :class="msg.senderEmail === myEmail ? 'sent' : 'received'"
       >
+        <span
+          v-if="msg.senderEmail === myEmail && msg.unreadCount > 0"
+          class="unread-count"
+        >
+          {{ msg.unreadCount }}
+        </span>
         <div class="bubble">
           <div class="sender">{{ msg.senderEmail }}</div>
           <div class="text">{{ msg.message }}</div>
